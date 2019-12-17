@@ -1,10 +1,54 @@
-eureka:
-  client:
-    serviceUrl:
-      # ָ��ע�����ĵĵ�ַ
-      defaultZone: http://localhost:8761/eureka/
 server:
   port: 8762
 spring:
   application:
     name: face-server-service
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    serviceUrl:
+      # 指定注册中心eureka的服务注册地址
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      # Actuator 默认所有的监控点路径都在 /actuator/*， 现在设置为 /monitor/*
+      base-path: /monitor
+      exposure:
+        include: ["health", "info", "env" , "metrics" , "prometheus"]
+  endpoint:
+    health:
+      enabled: true
+      show-details: always
+    metrics:
+      export:
+        # Prometheus is the default metrics backend
+        prometheus:
+          enabled: true
+          step: 60
+      binders:
+        jvm:
+          enabled: true
+        processor:
+          enabled: true
+        uptime:
+          enabled: true
+        logback:
+          enabled: true
+        files:
+          enabled: true
+        integration:
+          enabled: true
+      distribution:
+        percentiles-histogram:
+          all: true
+        percentiles:
+          all: 0, 0.5, 0.75, 0.95, 0.99, 1.0
+      web:
+        server:
+          auto-time-requests: true
+      enabled: true
+    prometheus:
+      enabled: true
